@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nguyen Minh Hobby - Thế Giới Mô Hình</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Thanh điều hướng (Header) -->
+    <header class="header">
+        <div class="logo">Nguyen Minh<span>Hobby</span></div>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Tìm mô hình Gundam, Anime..." oninput="filterProducts()">
+        </div>
+        <button class="cart-btn" onclick="toggleCart()">
+            🛒 Giỏ hàng (<span id="cart-count">0</span>)
+        </button>
+    </header>
+
+    <!-- Banner quảng cáo -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Sưu Tầm Đam Mê Của Bạn</h1>
+            <p>Chuyên cung cấp mô hình Anime, Gundam, Marvel chính hãng với độ chi tiết cực cao.</p>
+        </div>
+    </section>
+<!-- Bộ lọc danh mục mở rộng -->
+    <section class="categories">
+        <button class="cat-btn active" onclick="setCategory('all', this)">Tất cả</button>
+        <button class="cat-btn" onclick="setCategory('Gundam', this)">Gundam</button>
+        <button class="cat-btn" onclick="setCategory('One Piece', this)">One Piece</button>
+        <button class="cat-btn" onclick="setCategory('Dragon Ball', this)">Dragon Ball</button>
+        <button class="cat-btn" onclick="setCategory('Anime Khác', this)">Anime Khác</button>
+        <button class="cat-btn" onclick="setCategory('Marvel / DC', this)">Marvel / DC</button>
+        <button class="cat-btn" onclick="setCategory('Nendoroid', this)">Chibi / Nendoroid</button>
+        <button class="cat-btn" onclick="setCategory('Mô Hình Xe', this)">Mô Hình Xe</button>
+    </section>
+    <!-- Danh sách sản phẩm -->
+    <main class="container">
+        <div id="product-list" class="product-grid">
+            <!-- Sản phẩm sẽ được tự động thêm bằng JavaScript -->
+        </div>
+    </main>
+
+    <!-- Hộp thoại Giỏ hàng (Modal) -->
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Giỏ Hàng Của Bạn</h2>
+                <button class="close-btn" onclick="toggleCart()">✖</button>
+            </div>
+            <div id="cart-items" class="cart-items">
+                <!-- Danh sách món hàng trong giỏ -->
+            </div>
+            <div class="cart-footer">
+                <h3>Tổng cộng: <span id="cart-total">0đ</span></h3>
+                <button class="checkout-btn" onclick="checkout()">Thanh Toán Ngay</button>
+            </div>
+        </div>
+    </div>
+<!-- Hộp thoại Form Thanh Toán -->
+    <div id="checkout-modal" class="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Thông Tin Giao Hàng</h2>
+                <button class="close-btn" onclick="toggleCheckoutModal()">✖</button>
+            </div>
+            <form id="checkout-form" onsubmit="submitOrder(event)" style="margin-top: 15px;">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label style="display: block; margin-bottom: 5px; font-size: 14px;">Họ và tên *</label>
+                    <input type="text" id="cus-name" required placeholder="Nhập họ và tên của bạn" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #333; background: #2b2b2b; color: #fff; outline: none;">
+                </div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label style="display: block; margin-bottom: 5px; font-size: 14px;">Số điện thoại *</label>
+                    <input type="tel" id="cus-phone" required placeholder="Nhập số điện thoại" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #333; background: #2b2b2b; color: #fff; outline: none;">
+                </div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label style="display: block; margin-bottom: 5px; font-size: 14px;">Địa chỉ nhận hàng *</label>
+                    <textarea id="cus-address" required rows="3" placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #333; background: #2b2b2b; color: #fff; outline: none; resize: none;"></textarea>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; font-size: 14px;">Ghi chú đơn hàng (tuỳ chọn)</label>
+                    <input type="text" id="cus-note" placeholder="Ví dụ: Giao giờ hành chính..." style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #333; background: #2b2b2b; color: #fff; outline: none;">
+                </div>
+                <button type="submit" class="checkout-btn">Xác Nhận Đặt Hàng</button>
+            </form>
+        </div>
+    </div>
+    <!-- Phần Liên Hệ & CSKH -->
+    <section class="contact-section" id="contact">
+        <div class="contact-container">
+            <div class="contact-info-box">
+                <h2>Liên Hệ & Hỗ Trợ Khách Hàng</h2>
+                <p>Bạn cần tư vấn về mã Gundam, tỉ lệ figure hay check tình trạng hàng? Hãy liên hệ ngay với FigureZone qua các kênh dưới đây:</p>
+                <ul class="contact-list">
+                    <li>📞 <strong>Hotline/Zalo:</strong> 0941.030.823 (8:00 - 21:00)</li>
+                    <li>💬 <strong>Fanpage Facebook:</strong> https://www.facebook.com/antiband12141321</li>
+                    <li>📧 <strong>Email hỗ trợ:</strong> daiminh2k6avm@gmail.com</li>
+                    <li>📍 <strong>Địa chỉ cửa hàng:</strong> Số 123 Đường Trịnh Văn Bô, Quận Nam Từ Liêm, TP. Hà Nội</li>
+                </ul>
+            </div>
+            <div class="contact-form-box">
+                <h3>Gửi Thắc Mắc Cho Shop</h3>
+                <form onsubmit="submitContact(event)">
+                    <input type="text" placeholder="Họ và tên của bạn" required class="contact-input">
+                    <input type="email" placeholder="Email của bạn" required class="contact-input">
+                    <textarea placeholder="Nội dung cần hỗ trợ (ví dụ: Hỏi về hàng đặt trước...)" rows="3" required class="contact-input" style="resize: none;"></textarea>
+                    <button type="submit" class="contact-submit-btn">Gửi Tin Nhắn</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nút Chat nổi cố định góc màn hình -->
+    <div class="floating-contact">
+        <a href="https://zalo.me/0941030823" target="_blank" class="float-btn zalo-btn" title="Chat Zalo CSKH">Zalo</a>
+        <a href="https://www.facebook.com/antiband12141321" target="_blank" class="float-btn messenger-btn" title="Chat Facebook Messenger">Chat</a>
+    </div>
+    <!-- Chân trang (Footer) -->
+    <footer class="footer">
+        <p>© 2026 FigureZone - Shop Mô Hình Chính Hãng. Thiết kế trên VS Code.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <!-- Hộp thoại Xem Chi Tiết Sản Phẩm (Modal) -->
+    <div id="detail-modal" class="cart-modal">
+        <div class="detail-content">
+            <button class="close-detail-btn" onclick="toggleDetailModal()">✖</button>
+            <div class="detail-grid">
+                <!-- Cột hình ảnh sản phẩm -->
+                <div class="detail-img-box">
+                    <img id="detail-img" src="" alt="Ảnh sản phẩm">
+                </div>
+                <!-- Cột thông tin chi tiết -->
+                <div class="detail-info-box">
+                    <span id="detail-category" class="product-category"></span>
+                    <h2 id="detail-name" class="product-title" style="font-size: 24px; margin: 10px 0;"></h2>
+                    <p id="detail-price" class="product-price" style="font-size: 22px; margin-bottom: 15px;"></p>
+                    
+                    <div class="specs-box" style="background: #2b2b2b; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <p style="margin-bottom: 8px;">📏 <strong>Kích thước:</strong> <span id="detail-size"></span></p>
+                        <p style="margin-bottom: 8px;">🧱 <strong>Chất liệu:</strong> <span id="detail-material"></span></p>
+                        <p style="margin-bottom: 8px;">🏭 <strong>Hãng sản xuất:</strong> <span id="detail-brand"></span></p>
+                        <p>📦 <strong>Tình trạng:</strong> <span style="color: #2ed573; font-weight: bold;">Còn hàng (Chính hãng)</span></p>
+                    </div>
+
+                    <button id="detail-add-btn" class="checkout-btn" style="background: #ff4757;">+ Thêm vào giỏ hàng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
